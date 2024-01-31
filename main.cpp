@@ -17,7 +17,22 @@ int main()
         glfwTerminate();
         return -1;
     }
+    glfwMakeContextCurrent(window);
 
+    gladLoadGL();
+
+    glViewport(0, 0, 800, 800);
+
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glfwSwapBuffers(window);
+
+    while (!glfwWindowShouldClose(window))
+    {
+        glfwPollEvents();
+    }
+
+    glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
 }
