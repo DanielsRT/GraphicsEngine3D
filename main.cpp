@@ -80,6 +80,39 @@ int main()
     // Create shader program
     GLuint shaderProgram = CreateShader();
 
+    // vertices coordinates
+    GLfloat vertices[] =
+    {
+        -0.6f, -0.6f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
+        0.6f, -0.6f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
+        0.0f, 0.6f * float(sqrt(3)) * 2 / 3, 0.0f // Upper corner
+    };
+
+    // Create containers for vertex array and vertex buffer
+    GLuint VAO, VBO;
+
+    // Generate vertex array and buffer
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+
+    // Make VAO the current vertex array
+    glBindVertexArray(VAO);
+
+    // Bind VBO as an array buffer
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // Add the vertices into the buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // Configure the vertex attribute so OpenGL can read the vertex buffer
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // Enable the vertex attribute
+    glEnableVertexAttribArray(0);
+
+    // Bind VAO and VBO to 0 so they can't be mistakenly modified
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+
     // Set background color
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     // Clear back buffor and assign the new color
@@ -89,9 +122,23 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        // Select shader program
+        glUseProgram(shaderProgram);
+        // Bind VAO so OpenGL can use it
+        glBindVertexArray(VAO);
+        // Draw the triangle using the 'GL_TRIANGLES' type
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glfwSwapBuffers(window);
         // handles GLFW events during execution
         glfwPollEvents();
     }
+
+    // Delete shader and vertex objects
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shaderProgram);
 
     // Delete window
     glfwDestroyWindow(window);
