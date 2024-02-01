@@ -17,6 +17,38 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "   FragColor = vec4(1.0f, 1.0f, 1.0f, 0.0f);\n"
 "}\n\0";
 
+static GLuint CreateShader()
+{
+    // Create vertex Shader object
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    // Attach vertex shader source code to object
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    // Compile vertex shader to machine code
+    glCompileShader(vertexShader);
+
+    // Create fragment shader object
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    // Attach fragment shader source code to object
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    // Compile fragment shader to machine code
+    glCompileShader(fragmentShader);
+
+    // Create shader program object
+    GLuint shaderProgram = glCreateProgram();
+
+    // Attach vertex and fragment shaders to program
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    // Link shaders with program
+    glLinkProgram(shaderProgram);
+
+    // Delete shader objects
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    return shaderProgram;
+}
+
 int main()
 {
     // Initialize GLFW
@@ -44,6 +76,9 @@ int main()
 
     // Specify view coordinates and size. (x=0, y=0, 800x800)
     glViewport(0, 0, 800, 800);
+
+    // Create shader program
+    GLuint shaderProgram = CreateShader();
 
     // Set background color
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
