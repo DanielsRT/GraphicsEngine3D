@@ -19,5 +19,5 @@ void EBO::Unbind()
 
 void EBO::Delete()
 {
-	glDeleteBuffers(1, ID);
+	glDeleteBuffers(1, &ID);
 }
