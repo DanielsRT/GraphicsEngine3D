@@ -4,38 +4,6 @@
 
 
 
-static GLuint CreateShader()
-{
-    // Create vertex Shader object
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    // Attach vertex shader source code to object
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    // Compile vertex shader to machine code
-    glCompileShader(vertexShader);
-
-    // Create fragment shader object
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    // Attach fragment shader source code to object
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    // Compile fragment shader to machine code
-    glCompileShader(fragmentShader);
-
-    // Create shader program object
-    GLuint shaderProgram = glCreateProgram();
-
-    // Attach vertex and fragment shaders to program
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    // Link shaders with program
-    glLinkProgram(shaderProgram);
-
-    // Delete shader objects
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    return shaderProgram;
-}
-
 int main()
 {
     // Initialize GLFW
