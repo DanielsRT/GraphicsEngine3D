@@ -7,14 +7,18 @@
 class VAO
 {
 public:
-	GLuint ID:
+	// ID reference for the Vertex Array Object
+	GLuint ID;
+	// Constructor that generates a VAO ID
 	VAO();
 
-	void LinkVBO(VBO VBO, GLuint layout);
+	// Links a VBO to the VAO using a certain layout
+	void LinkVBO(VBO& VBO, GLuint layout);
+	// Binds the VAO
 	void Bind();
+	// Unbinds the VAO
 	void Unbind();
+	// Deletes the VAO
 	void Delete();
 };
-
-#endif // !VAO_CLASS_H
-
+#endif
