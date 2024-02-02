@@ -53,17 +53,20 @@ int main()
     // Specify view coordinates and size. (x=0, y=0, 800x800)
     glViewport(0, 0, 800, 800);
 
-    
+    // Create Shader object
     Shader shaderProgram("default.vert", "default.frag");
 
-
+    // Create and bind vertex array object
     VAO VAO1;
     VAO1.Bind();
 
+    //Create buffer objects
     VBO VBO1(vertices, sizeof(vertices));
     EBO EBO1(indices, sizeof(indices));
 
+    // Link VBO to VAO
     VAO1.LinkVBO(VBO1, 0);
+    // Unbind objects to prevent modification
     VAO1.Unbind();
     VBO1.Unbind();
     EBO1.Unbind();
