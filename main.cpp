@@ -64,12 +64,16 @@ int main()
     VBO VBO1(vertices, sizeof(vertices));
     EBO EBO1(indices, sizeof(indices));
 
-    // Link VBO to VAO
-    VAO1.LinkVBO(VBO1, 0);
+    // Link VBO attributes and colors to VAO
+    VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
+    VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3*sizeof(float)));
     // Unbind objects to prevent modification
     VAO1.Unbind();
     VBO1.Unbind();
     EBO1.Unbind();
+
+    // Get ID of uniform variable 'scale'
+    GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
 
     while (!glfwWindowShouldClose(window))
@@ -78,6 +82,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
         // Select shader program
         shaderProgram.Activate();
+        // Assign 'scale' value. Always do after shader program activation.
+        glUniform1f(uniID, 0.5f);
         // Bind VAO so OpenGL can use it
         VAO1.Bind();
         // Draw the triangle using the 'GL_TRIANGLES' type
