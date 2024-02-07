@@ -12,6 +12,9 @@
 #include"VBO.h"
 #include"EBO.h"
 
+const unsigned int windowWidth = 800;
+const unsigned int windowHeight = 800;
+
 // vertices coordinates
 GLfloat vertices[] =
 {//      Coordinates      //        Colors
@@ -39,7 +42,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create a 800x800 GLFWwindow
-    GLFWwindow* window = glfwCreateWindow(800, 800, "3D Graphics", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "3D Graphics", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Error creating GLFW window" << std::endl;
@@ -53,7 +56,7 @@ int main()
     gladLoadGL();
 
     // Specify view coordinates and size. (x=0, y=0, 800x800)
-    glViewport(0, 0, 800, 800);
+    glViewport(0, 0, windowWidth, windowHeight);
 
     // Create Shader object
     Shader shaderProgram("default.vert", "default.frag");
@@ -88,6 +91,23 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
         // Select shader program
         shaderProgram.Activate();
+
+        // Initialize matrices
+        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 view = glm::mat4(1.0f);
+        glm::mat4 proj = glm::mat4(1.0f);
+
+        view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
+        proj = glm::perspective(glm::radians(45.0f), (float)(windowWidth / windowHeight), 0.1f, 100.0f);
+
+        // Send matrices to the vertex shader
+        int modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        int viewLoc = glGetUniformLocation(shaderProgram.ID, "view");
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        int projLoc = glGetUniformLocation(shaderProgram.ID, "proj");
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+
         // Assign 'scale' value. Always do after shader program activation.
         glUniform1f(uniID, 0.5f);
         // Bind the texture so it renders
