@@ -17,17 +17,22 @@ const unsigned int windowHeight = 800;
 
 // vertices coordinates
 GLfloat vertices[] =
-{//      Coordinates      //        Colors
-    -0.5f, -0.5f, 0.0f,      0.8f, 0.3f, 0.02f,  0.0f, 0.0f, // Lower left corner
-    -0.5f,  0.5f, 0.0f,      1.0f, 0.4f, 0.32f,  0.0f, 1.0f, // Upper left corner
-     0.5f,  0.5f, 0.0f,      0.8f, 0.5f, 0.17f,  1.0f, 1.0f, // Upper right corner
-     0.5f, -0.5f, 0.0f,      0.7f, 0.3f, 0.02f,  1.0f, 0.0f // Lower right corner
+{//      Coordinates      //       Colors        //  TexCoord
+    -0.5f,  0.0f,  0.5f,      0.8f, 0.8f, 0.52f,    0.0f, 0.0f, 
+    -0.5f,  0.0f, -0.5f,      1.0f, 0.2f, 0.32f,    5.0f, 0.0f, 
+     0.5f,  0.0f, -0.5f,      0.8f, 0.9f, 0.17f,    0.0f, 0.0f, 
+     0.5f,  0.0f,  0.5f,      0.7f, 0.7f, 0.02f,    5.0f, 0.0f, 
+     0.0f,  0.8f,  0.0f,      0.7f, 0.7f, 0.32f,    2.5f, 5.0f 
 };
 // Indices for vertex order
 GLuint indices[] =
 {
-    0, 2, 1,  // Upper triangle
-    0, 3, 2   // Lower triangle
+    0, 2, 1,  
+    0, 2, 3,
+    0, 1, 4,
+    1, 2, 4,
+    2, 3, 4,
+    3, 0, 4
 };
 
 int main()
@@ -115,7 +120,7 @@ int main()
         // Bind VAO so OpenGL can use it
         VAO1.Bind();
         // Draw the triangle using the 'GL_TRIANGLES' type
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);
         // handles GLFW events during execution
         glfwPollEvents();
