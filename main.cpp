@@ -90,6 +90,10 @@ int main()
     Texture coolTurtle("turtle_sunglasses.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
     coolTurtle.texUnit(shaderProgram, "tex0", 0);
 
+    // Variables for object rotation
+    float rotation = 0.0f;
+    double prevTime = glfwGetTime();
+
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -97,11 +101,20 @@ int main()
         // Select shader program
         shaderProgram.Activate();
 
+        // Timer for object rotation
+        double currentTime = glfwGetTime();
+        if (currentTime - prevTime >= 1 / 60)
+        {
+            rotation += 0.05f;
+            prevTime = currentTime;
+        }
+
         // Initialize matrices
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = glm::mat4(1.0f);
         glm::mat4 proj = glm::mat4(1.0f);
 
+        model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
         view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
         proj = glm::perspective(glm::radians(45.0f), (float)(windowWidth / windowHeight), 0.1f, 100.0f);
 
