@@ -94,10 +94,12 @@ int main()
     float rotation = 0.0f;
     double prevTime = glfwGetTime();
 
+    glEnable(GL_DEPTH_TEST);
+
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // Select shader program
         shaderProgram.Activate();
 
@@ -105,7 +107,7 @@ int main()
         double currentTime = glfwGetTime();
         if (currentTime - prevTime >= 1 / 60)
         {
-            rotation += 0.05f;
+            rotation += 0.02f;
             prevTime = currentTime;
         }
 
