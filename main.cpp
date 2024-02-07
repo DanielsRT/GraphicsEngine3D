@@ -87,8 +87,8 @@ int main()
     GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
     // Texture
-    Texture coolTurtle("turtle_sunglasses.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-    coolTurtle.texUnit(shaderProgram, "tex0", 0);
+    Texture brickTexture("brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+    brickTexture.texUnit(shaderProgram, "tex0", 0);
 
     // Variables for object rotation
     float rotation = 0.0f;
@@ -131,7 +131,7 @@ int main()
         // Assign 'scale' value. Always do after shader program activation.
         glUniform1f(uniID, 0.5f);
         // Bind the texture so it renders
-        coolTurtle.Bind();
+        brickTexture.Bind();
         // Bind VAO so OpenGL can use it
         VAO1.Bind();
         // Draw the triangle using the 'GL_TRIANGLES' type
@@ -145,7 +145,7 @@ int main()
     VAO1.Delete();
     VBO1.Delete();
     EBO1.Delete();
-    coolTurtle.Delete();
+    brickTexture.Delete();
     shaderProgram.Delete();
     // Delete window
     glfwDestroyWindow(window);
