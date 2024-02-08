@@ -105,7 +105,8 @@ int main()
         // Control camera inputs
         camera.Inputs(window);
         // Send camera matrix to the vertex shader
-        camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
+        camera.updateMatrix(45.0f, 0.1f, 100.0f);
+        camera.Matrix(shaderProgram, "camMatrix");
         
         // Bind the texture so it renders
         brickTexture.Bind();
