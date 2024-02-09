@@ -36,6 +36,34 @@ GLuint indices[] =
     3, 0, 4
 };
 
+GLfloat lightVertices[] =
+{
+    -0.1f, -0.1f,  0.1f,
+    -0.1f, -0.1f, -0.1f,
+     0.1f, -0.1f, -0.1f,
+     0.1f, -0.1f,  0.1f,
+    -0.1f,  0.1f,  0.1f,
+    -0.1f,  0.1f, -0.1f,
+     0.1f,  0.1f, -0.1f,
+     0.1f,  0.1f,  0.1f,
+};
+
+GLuint lightIndices[] =
+{
+    0, 1, 2,
+    0, 2, 3,
+    0, 4, 7,
+    0, 7, 3,
+    3, 7, 6,
+    3, 6, 2,
+    2, 6, 5,
+    2, 5, 1,
+    1, 5, 4,
+    1, 4, 0,
+    4, 5, 6,
+    4, 6, 7
+};
+
 int main()
 {
     // Initialize GLFW
@@ -84,6 +112,35 @@ int main()
     VBO1.Unbind();
     EBO1.Unbind();
 
+    // Shader for light cube
+    Shader lightShader("light.vert", "light.frag");
+    // Generate and bind light vertex array object
+    VAO lightVAO;
+    lightVAO.Bind();
+    // Generate vertex buffer object and link to light vertices
+    VBO lightVBO(lightVertices, sizeof(lightVertices));
+    // Generate element buffer object and link to indices
+    EBO lightEBO(lightIndices, sizeof(lightIndices));
+    // Link VBO attributes like coordinates and colors to VAO
+    lightVAO.LinkAttrib(lightVBO, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+    // Unbind to prevent accidental modification
+    lightVAO.Unbind();
+    lightVBO.Unbind();
+    lightEBO.Unbind();
+
+    glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
+    glm::mat4 lightModel = glm::mat4(1.0f);
+    lightModel = glm::translate(lightModel, lightPos);
+
+    glm::vec3 pyramidPos = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::mat4 pyramidModel = glm::mat4(1.0f);
+    pyramidModel = glm::translate(pyramidModel, pyramidPos);
+
+    lightShader.Activate();
+    glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
+    shaderProgram.Activate();
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
+
     // Texture
     Texture brickTexture("brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
     brickTexture.texUnit(shaderProgram, "tex0", 0);
@@ -99,13 +156,14 @@ int main()
         // Set background color
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // Select shader program
-        shaderProgram.Activate();
 
         // Control camera inputs
         camera.Inputs(window);
         // Send camera matrix to the vertex shader
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
+
+        // Select shader program
+        shaderProgram.Activate();
         camera.Matrix(shaderProgram, "camMatrix");
         
         // Bind the texture so it renders
@@ -114,6 +172,13 @@ int main()
         VAO1.Bind();
         // Draw the triangle using the 'GL_TRIANGLES' type
         glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
+
+        lightShader.Activate();
+        camera.Matrix(lightShader, "camMatrix");
+        lightVAO.Bind();
+        glDrawElements(GL_TRIANGLES, sizeof(lightIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
+
+        // Swap back buffer with front buffer
         glfwSwapBuffers(window);
         // handles GLFW events during execution
         glfwPollEvents();
