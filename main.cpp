@@ -184,7 +184,9 @@ int main()
 
         // Select shader program
         shaderProgram.Activate();
+        // Export camera position to the fragment shader for specular lighting
         glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
+        // Export the camMatrix to the vertex shader of the model object
         camera.Matrix(shaderProgram, "camMatrix");
         
         // Bind the texture so it renders
@@ -194,7 +196,9 @@ int main()
         // Draw the triangle using the 'GL_TRIANGLES' type
         glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
 
+        // Activate the light shader
         lightShader.Activate();
+        // Export camMatrix to the vertetx shader of the light cube
         camera.Matrix(lightShader, "camMatrix");
         lightVAO.Bind();
         glDrawElements(GL_TRIANGLES, sizeof(lightIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
