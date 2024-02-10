@@ -142,8 +142,11 @@ int main()
     glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 
     // Texture
-    Texture brickTexture("planks.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-    brickTexture.texUnit(shaderProgram, "tex0", 0);
+    Texture plankTexture("planks.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
+    plankTexture.texUnit(shaderProgram, "tex0", 0);
+    Texture plankSpec("planksSpec.png", GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
+    plankSpec.texUnit(shaderProgram, "tex1", 1);
+
    
     // Enable depth buffer
     glEnable(GL_DEPTH_TEST);
@@ -170,7 +173,8 @@ int main()
         camera.Matrix(shaderProgram, "camMatrix");
         
         // Bind the texture so it renders
-        brickTexture.Bind();
+        plankTexture.Bind();
+        plankSpec.Bind();
         // Bind VAO so OpenGL can use it
         VAO1.Bind();
         // Draw the triangle using the 'GL_TRIANGLES' type
@@ -193,7 +197,7 @@ int main()
     VAO1.Delete();
     VBO1.Delete();
     EBO1.Delete();
-    brickTexture.Delete();
+    plankTexture.Delete();
     shaderProgram.Delete();
     // Delete window
     glfwDestroyWindow(window);
