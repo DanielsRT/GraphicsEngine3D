@@ -2,17 +2,21 @@
 
 Model::Model(const char* file)
 {
+	// Make a JSON object
 	std::string text = get_file_contents(file);
 	JSON = json::parse(text);
 
+	// Get the binary data
 	Model::file = file;
 	data = getData();
 
+	// Traverse all nodes
 	traverseNode(0);
 }
 
 void Model::Draw(Shader& shader, Camera& camera)
 {
+	// Iterate all meshes and draw each one
 	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i].Mesh::Draw(shader, camera, matricesMeshes[i]);
@@ -124,13 +128,16 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 
 std::vector<unsigned char> Model::getData()
 {
+	// Initialize variable for raw text and get the uri of the .bin file
 	std::string bytesText;
 	std::string uri = JSON["buffers"][0]["uri"];
 
+	// Store raw text data into bytesText
 	std::string fileStr = std::string(file);
 	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
 	bytesText = get_file_contents((fileDirectory + uri).c_str());
 
+	// Transform the raw text into bytes and add them to a vector
 	std::vector<unsigned char> data(bytesText.begin(), bytesText.end());
 	return data;
 }
@@ -139,14 +146,17 @@ std::vector<float> Model::getFloats(json accessor)
 {
 	std::vector<float> floatVec;
 
+	// Get properties from the accessor
 	unsigned int buffViewInd = accessor.value("bufferView", 1);
 	unsigned int count = accessor["count"];
 	unsigned int accByteOffset = accessor.value("byteOffset", 0);
 	std::string type = accessor["type"];
 
+	// Get properties from the bufferView
 	json bufferView = JSON["bufferViews"][buffViewInd];
 	unsigned int byteOffset = bufferView["byteOffset"];
 
+	// Interpret the tyhpe and store it into numPerVertex
 	unsigned int numPerVertex;
 	if (type == "SCALAR") numPerVertex = 1;
 	else if (type == "VEC2") numPerVertex = 2;
@@ -154,6 +164,7 @@ std::vector<float> Model::getFloats(json accessor)
 	else if (type == "VEC4") numPerVertex = 4;
 	else throw std::invalid_argument("Type is invalid (not SCALAR, VEC2, VEC3, or VEC4)");
 
+	// Iterate through all bytes in the data
 	unsigned int beginningOfData = byteOffset + accByteOffset;
 	unsigned int lengthOfData = count * 4 * numPerVertex;
 	for (unsigned int i = beginningOfData; i < beginningOfData + lengthOfData; i) 
@@ -171,14 +182,17 @@ std::vector<GLuint> Model::getIndices(json accessor)
 {
 	std::vector<GLuint> indices;
 
+	// Get properties from the accessor
 	unsigned int buffViewInd = accessor.value("bufferView", 0);
 	unsigned int count = accessor["count"];
 	unsigned int accByteOffset = accessor.value("byuteOffset", 0);
 	unsigned int componentType = accessor["componentType"];
 
+	// Get properties from the bufferView
 	json bufferView = JSON["bufferViews"][buffViewInd];
 	unsigned int byteOffset = bufferView["byteOffset"];
 
+	// Get indices with regards to their type: unsigned int, unsigned short, or short
 	unsigned int beginningOfData = byteOffset + accByteOffset;
 	if (componentType == 5125)
 	{
@@ -221,10 +235,13 @@ std::vector<Texture> Model::getTextures()
 	std::string fileStr = std::string(file);
 	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
 
+	// Iterate through all images
 	for (unsigned int i = 0; i < JSON["images"].size(); i++)
 	{
+		// uri of the current texture
 		std::string texPath = JSON["images"][i]["uri"];
 
+		// Check if the texture has been loaded
 		bool skip = false;
 		for (unsigned int j = 0; j < loadedTexName.size(); j++)
 		{
@@ -236,8 +253,10 @@ std::vector<Texture> Model::getTextures()
 			}
 		}
 
+		// If the texture has been loaded, don't load again
 		if (!skip)
 		{
+			// Load diffuse texture
 			if (texPath.find("baseColor") != std::string::npos)
 			{
 				Texture diffuse = Texture((fileDirectory + texPath).c_str(), "diffuse", loadedTex.size());
@@ -245,6 +264,7 @@ std::vector<Texture> Model::getTextures()
 				loadedTex.push_back(diffuse);
 				loadedTexName.push_back(texPath);
 			}
+			// Load specular texture
 			else if (texPath.find("metallicroughness") != std::string::npos)
 			{
 				Texture specular = Texture((fileDirectory + texPath).c_str(), "specular", loadedTex.size());
