@@ -16,7 +16,7 @@ Model::Model(const char* file)
 
 void Model::Draw(Shader& shader, Camera& camera)
 {
-	// Iterate all meshes and draw each one
+	// Go over all meshes and draw each one
 	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i].Mesh::Draw(shader, camera, matricesMeshes[i]);
@@ -128,7 +128,7 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 
 std::vector<unsigned char> Model::getData()
 {
-	// Initialize variable for raw text and get the uri of the .bin file
+	// Create a place to store the raw text, and get the uri of the .bin file
 	std::string bytesText;
 	std::string uri = JSON["buffers"][0]["uri"];
 
@@ -137,7 +137,7 @@ std::vector<unsigned char> Model::getData()
 	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
 	bytesText = get_file_contents((fileDirectory + uri).c_str());
 
-	// Transform the raw text into bytes and add them to a vector
+	// Transform the raw text data into bytes and put them in a vector
 	std::vector<unsigned char> data(bytesText.begin(), bytesText.end());
 	return data;
 }
@@ -156,18 +156,18 @@ std::vector<float> Model::getFloats(json accessor)
 	json bufferView = JSON["bufferViews"][buffViewInd];
 	unsigned int byteOffset = bufferView["byteOffset"];
 
-	// Interpret the tyhpe and store it into numPerVertex
-	unsigned int numPerVertex;
-	if (type == "SCALAR") numPerVertex = 1;
-	else if (type == "VEC2") numPerVertex = 2;
-	else if (type == "VEC3") numPerVertex = 3;
-	else if (type == "VEC4") numPerVertex = 4;
+	// Interpret the type and store it into numPerVert
+	unsigned int numPerVert;
+	if (type == "SCALAR") numPerVert = 1;
+	else if (type == "VEC2") numPerVert = 2;
+	else if (type == "VEC3") numPerVert = 3;
+	else if (type == "VEC4") numPerVert = 4;
 	else throw std::invalid_argument("Type is invalid (not SCALAR, VEC2, VEC3, or VEC4)");
 
-	// Iterate through all bytes in the data
+	// Go over all the bytes in the data at the correct place using the properties from above
 	unsigned int beginningOfData = byteOffset + accByteOffset;
-	unsigned int lengthOfData = count * 4 * numPerVertex;
-	for (unsigned int i = beginningOfData; i < beginningOfData + lengthOfData; i) 
+	unsigned int lengthOfData = count * 4 * numPerVert;
+	for (unsigned int i = beginningOfData; i < beginningOfData + lengthOfData; i)
 	{
 		unsigned char bytes[] = { data[i++], data[i++], data[i++], data[i++] };
 		float value;
@@ -185,7 +185,7 @@ std::vector<GLuint> Model::getIndices(json accessor)
 	// Get properties from the accessor
 	unsigned int buffViewInd = accessor.value("bufferView", 0);
 	unsigned int count = accessor["count"];
-	unsigned int accByteOffset = accessor.value("byuteOffset", 0);
+	unsigned int accByteOffset = accessor.value("byteOffset", 0);
 	unsigned int componentType = accessor["componentType"];
 
 	// Get properties from the bufferView
@@ -235,13 +235,13 @@ std::vector<Texture> Model::getTextures()
 	std::string fileStr = std::string(file);
 	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
 
-	// Iterate through all images
+	// Go over all images
 	for (unsigned int i = 0; i < JSON["images"].size(); i++)
 	{
-		// uri of the current texture
+		// uri of current texture
 		std::string texPath = JSON["images"][i]["uri"];
 
-		// Check if the texture has been loaded
+		// Check if the texture has already been loaded
 		bool skip = false;
 		for (unsigned int j = 0; j < loadedTexName.size(); j++)
 		{
@@ -253,7 +253,7 @@ std::vector<Texture> Model::getTextures()
 			}
 		}
 
-		// If the texture has been loaded, don't load again
+		// If the texture has been loaded, skip this
 		if (!skip)
 		{
 			// Load diffuse texture
@@ -265,7 +265,7 @@ std::vector<Texture> Model::getTextures()
 				loadedTexName.push_back(texPath);
 			}
 			// Load specular texture
-			else if (texPath.find("metallicroughness") != std::string::npos)
+			else if (texPath.find("metallicRoughness") != std::string::npos)
 			{
 				Texture specular = Texture((fileDirectory + texPath).c_str(), "specular", loadedTex.size());
 				textures.push_back(specular);
@@ -274,6 +274,8 @@ std::vector<Texture> Model::getTextures()
 			}
 		}
 	}
+
+	return textures;
 }
 
 std::vector<Vertex> Model::assembleVertices
@@ -309,7 +311,6 @@ std::vector<glm::vec2> Model::groupFloatsVec2(std::vector<float> floatVec)
 	}
 	return vectors;
 }
-
 std::vector<glm::vec3> Model::groupFloatsVec3(std::vector<float> floatVec)
 {
 	std::vector<glm::vec3> vectors;
@@ -319,7 +320,6 @@ std::vector<glm::vec3> Model::groupFloatsVec3(std::vector<float> floatVec)
 	}
 	return vectors;
 }
-
 std::vector<glm::vec4> Model::groupFloatsVec4(std::vector<float> floatVec)
 {
 	std::vector<glm::vec4> vectors;

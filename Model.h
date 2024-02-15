@@ -6,6 +6,7 @@
 
 using json = nlohmann::json;
 
+
 class Model
 {
 public:
@@ -15,6 +16,7 @@ public:
 	void Draw(Shader& shader, Camera& camera);
 
 private:
+	// Variables for easy access
 	const char* file;
 	std::vector<unsigned char> data;
 	json JSON;

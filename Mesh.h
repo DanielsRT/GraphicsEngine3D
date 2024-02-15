@@ -14,11 +14,13 @@ public:
 	std::vector <Vertex> vertices;
 	std::vector <GLuint> indices;
 	std::vector <Texture> textures;
-
+	// Store VAO in public so it can be used in the Draw function
 	VAO VAO;
 
+	// Initializes the mesh
 	Mesh(std::vector <Vertex>& vertices, std::vector <GLuint>& indices, std::vector <Texture>& textures);
 
+	// Draws the mesh
 	void Draw
 	(
 		Shader& shader,
@@ -29,5 +31,4 @@ public:
 		glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f)
 	);
 };
-
 #endif
