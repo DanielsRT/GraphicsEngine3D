@@ -6,7 +6,7 @@ Developed in Visual Studio and powered by OpenGL, Glad, and GLFW.
 
 ---
 
-## ✨ Features
+## Features
 
 - **3D Model Loading**: Import and display 3D models from various file formats.
 - **Custom Projection**: 3D-to-2D conversion using a projection matrix for flexible camera control.
@@ -17,7 +17,7 @@ Developed in Visual Studio and powered by OpenGL, Glad, and GLFW.
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -47,7 +47,7 @@ cd GraphicsEngine3D
 
 ---
 
-## 🗂️ Repository Structure
+## Repository Structure
 
 - `main.cpp` – Application entry point.
 - `Camera.*` – Camera and view matrix logic.
@@ -61,7 +61,7 @@ cd GraphicsEngine3D
 
 ---
 
-## 🛠️ Dependencies
+## Dependencies
 
 - [OpenGL](https://www.opengl.org/)
 - [GLFW](https://www.glfw.org/)
@@ -71,28 +71,8 @@ cd GraphicsEngine3D
 
 ---
 
-## 📦 Models & Textures
+## Models & Textures
 
 - Place your 3D models in the `models/` directory.
 - Place textures in the root or a dedicated `textures/` folder.
 - Update file paths in your code accordingly.
-
----
-
-## 📄 License
-
-This project is released under the MIT License.  
-See [LICENSE](LICENSE) for more information.
-
----
-
-## 🙏 Credits
-
-- OpenGL, GLFW, Glad, and stb_image for their excellent libraries.
-- Developed by [DanielsRT](https://github.com/DanielsRT)
-
----
-
-## 🔗 More
-
-For the latest code, issues, and contributions, visit the [project on GitHub](https://github.com/DanielsRT/GraphicsEngine3D).
