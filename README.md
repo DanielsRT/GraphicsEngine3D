@@ -4,7 +4,7 @@ A modern C++ application for loading, modeling, and rendering 3D graphics.
 This engine demonstrates how 3D coordinates are projected into 2D space using a customizable projection matrix.  
 Developed in Visual Studio and powered by OpenGL, Glad, and GLFW.
 
-<img width="996" height="949" alt="image" src="https://github.com/user-attachments/assets/33c9af6b-327e-4242-bbd6-a7b0dc1a9da3" />
+<img width="880" height="928" alt="image" src="https://github.com/user-attachments/assets/c9019f9c-b679-49e7-be85-5b9e266f988c" />
 
 ---
 
