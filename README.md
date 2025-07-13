@@ -4,6 +4,8 @@ A modern C++ application for loading, modeling, and rendering 3D graphics.
 This engine demonstrates how 3D coordinates are projected into 2D space using a customizable projection matrix.  
 Developed in Visual Studio and powered by OpenGL, Glad, and GLFW.
 
+<img width="996" height="949" alt="image" src="https://github.com/user-attachments/assets/33c9af6b-327e-4242-bbd6-a7b0dc1a9da3" />
+
 ---
 
 ## Features
@@ -25,7 +27,8 @@ Developed in Visual Studio and powered by OpenGL, Glad, and GLFW.
 - **C++17** or later
 - **OpenGL** (hardware and drivers)
 - **GLFW** and **Glad** (included, see `Libraries/`)
-- **stb_image** (for texture loading)
+- **stb_image** (for texture loading, included)
+- **json** (included)
 
 ### Cloning the Repository
 
@@ -67,6 +70,7 @@ cd GraphicsEngine3D
 - [GLFW](https://www.glfw.org/)
 - [Glad](https://glad.dav1d.de/)
 - [stb_image](https://github.com/nothings/stb)
+- [json](https://github.com/nlohmann/json)
 - [Visual Studio](https://visualstudio.microsoft.com/) or compatible C++ IDE
 
 ---
